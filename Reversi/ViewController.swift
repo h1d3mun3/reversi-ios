@@ -31,7 +31,8 @@ class ViewController: UIViewController {
         
         boardView.delegate = self
         messageDiskSize = messageDiskSizeConstraint.constant
-        
+
+        /* SRP違反 */
         do {
             try loadGame()
         } catch _ {
@@ -68,10 +69,11 @@ extension ViewController {
         
         return count
     }
-    
+
     /// 盤上に置かれたディスクの枚数が多い方の色を返します。
     /// 引き分けの場合は `nil` が返されます。
     /// - Returns: 盤上に置かれたディスクの枚数が多い方の色です。引き分けの場合は `nil` を返します。
+    /* SRP違反 */
     func sideWithMoreDisks() -> Disk? {
         let darkCount = countDisks(of: .dark)
         let lightCount = countDisks(of: .light)
@@ -81,7 +83,8 @@ extension ViewController {
             return darkCount > lightCount ? .dark : .light
         }
     }
-    
+
+    /* SRP違反 */
     private func flippedDiskCoordinatesByPlacingDisk(_ disk: Disk, atX x: Int, y: Int) -> [(Int, Int)] {
         let directions = [
             (x: -1, y: -1),
@@ -129,12 +132,14 @@ extension ViewController {
     /// - Parameter x: セルの列です。
     /// - Parameter y: セルの行です。
     /// - Returns: 指定されたセルに `disk` を置ける場合は `true` を、置けない場合は `false` を返します。
+    /* SRP違反 */
     func canPlaceDisk(_ disk: Disk, atX x: Int, y: Int) -> Bool {
         !flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y).isEmpty
     }
     
     /// `side` で指定された色のディスクを置ける盤上のセルの座標をすべて返します。
     /// - Returns: `side` で指定された色のディスクを置ける盤上のすべてのセルの座標の配列です。
+    /* SRP違反 */
     func validMoves(for side: Disk) -> [(x: Int, y: Int)] {
         var coordinates: [(Int, Int)] = []
         
@@ -157,6 +162,7 @@ extension ViewController {
     ///     このクロージャは値を返さず、アニメーションが完了したかを示す真偽値を受け取ります。
     ///     もし `animated` が `false` の場合、このクロージャは次の run loop サイクルの初めに実行されます。
     /// - Throws: もし `disk` を `x`, `y` で指定されるセルに置けない場合、 `DiskPlacementError` を `throw` します。
+    /* SRP違反 */
     func placeDisk(_ disk: Disk, atX x: Int, y: Int, animated isAnimated: Bool, completion: ((Bool) -> Void)? = nil) throws {
         let diskCoordinates = flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y)
         if diskCoordinates.isEmpty {
@@ -224,6 +230,7 @@ extension ViewController {
 
 extension ViewController {
     /// ゲームの状態を初期化し、新しいゲームを開始します。
+    /* SRP違反 */
     func newGame() {
         boardView.reset()
         turn = .dark
@@ -239,6 +246,7 @@ extension ViewController {
     }
     
     /// プレイヤーの行動を待ちます。
+    /* SRP違反 */
     func waitForPlayer() {
         guard let turn = self.turn else { return }
         switch Player(rawValue: playerControls[turn.index].selectedSegmentIndex)! {
@@ -252,6 +260,7 @@ extension ViewController {
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
     /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
     /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
+    /* SRP違反 */
     func nextTurn() {
         guard var turn = self.turn else { return }
 
@@ -283,6 +292,7 @@ extension ViewController {
     }
     
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
+    /* SRP違反 UseCaseに切り出したい */
     func playTurnOfComputer() {
         guard let turn = self.turn else { preconditionFailure() }
         let (x, y) = validMoves(for: turn).randomElement()!
@@ -313,6 +323,7 @@ extension ViewController {
 
 extension ViewController {
     /// 各プレイヤーの獲得したディスクの枚数を表示します。
+    /* SRP違反 */
     func updateCountLabels() {
         for side in Disk.sides {
             countLabels[side.index].text = "\(countDisks(of: side))"
@@ -320,6 +331,7 @@ extension ViewController {
     }
     
     /// 現在の状況に応じてメッセージを表示します。
+    /* SRP違反 メッセージ生成処理と表示処理を分けたい */
     func updateMessageViews() {
         switch turn {
         case .some(let side):
@@ -345,6 +357,7 @@ extension ViewController {
     /// リセットボタンが押された場合に呼ばれるハンドラーです。
     /// アラートを表示して、ゲームを初期化して良いか確認し、
     /// "OK" が選択された場合ゲームを初期化します。
+    /* SRP違反 ボタンが押されたときのロジックを切り出したい */
     @IBAction func pressResetButton(_ sender: UIButton) {
         let alertController = UIAlertController(
             title: "Confirmation",
@@ -390,6 +403,7 @@ extension ViewController: BoardViewDelegate {
     /// - Parameter boardView: セルをタップされた `BoardView` インスタンスです。
     /// - Parameter x: セルの列です。
     /// - Parameter y: セルの行です。
+    /* SRP違反 タップされたときのビジネスロジックを切り出したい */
     func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
         guard let turn = turn else { return }
         if isAnimating { return }
@@ -409,6 +423,7 @@ extension ViewController {
     }
     
     /// ゲームの状態をファイルに書き出し、保存します。
+    /* SRP違反 */
     func saveGame() throws {
         var output: String = ""
         output += turn.symbol
@@ -432,6 +447,7 @@ extension ViewController {
     }
     
     /// ゲームの状態をファイルから読み込み、復元します。
+    /* SRP違反 */
     func loadGame() throws {
         let input = try String(contentsOfFile: path, encoding: .utf8)
         var lines: ArraySlice<Substring> = input.split(separator: "\n")[...]
