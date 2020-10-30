@@ -4,6 +4,7 @@ class ViewController: UIViewController {
     // UseCases
     let saveGameUseCase = SaveGameUseCase()
     let loadGameUseCase = LoadGameUseCase()
+    let countDiskUseCase = CountDiskUseCase(loadGameUseCase: LoadGameUseCase())
 
     @IBOutlet private var boardView: BoardView!
     
@@ -61,17 +62,7 @@ extension ViewController {
     /// - Parameter side: 数えるディスクの色です。
     /// - Returns: `side` で指定された色のディスクの、盤上の枚数です。
     func countDisks(of side: Disk) -> Int {
-        var count = 0
-        
-        for y in boardView.yRange {
-            for x in boardView.xRange {
-                if boardView.diskAt(x: x, y: y) == side {
-                    count +=  1
-                }
-            }
-        }
-        
-        return count
+        return countDiskUseCase.count(disk: side) ?? 0
     }
 
     /// 盤上に置かれたディスクの枚数が多い方の色を返します。
