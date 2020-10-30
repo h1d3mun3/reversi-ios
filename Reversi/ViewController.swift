@@ -5,6 +5,10 @@ class ViewController: UIViewController {
     let saveGameUseCase = SaveGameUseCase()
     let loadGameUseCase = LoadGameUseCase()
     let countDiskUseCase = CountDiskUseCase(loadGameUseCase: LoadGameUseCase())
+    let validatePlaceDiskUseCase = ValidatePlaceDiskUseCase(
+        loadGameUseCase: LoadGameUseCase(),
+        getDiskFromBoardUseCase: GetDiskFromBoardUseCase(loadGameUseCase: LoadGameUseCase())
+    )
 
     @IBOutlet private var boardView: BoardView!
     
@@ -121,33 +125,6 @@ extension ViewController {
         
         return diskCoordinates
     }
-    
-    /// `x`, `y` で指定されたセルに、 `disk` が置けるかを調べます。
-    /// ディスクを置くためには、少なくとも 1 枚のディスクをひっくり返せる必要があります。
-    /// - Parameter x: セルの列です。
-    /// - Parameter y: セルの行です。
-    /// - Returns: 指定されたセルに `disk` を置ける場合は `true` を、置けない場合は `false` を返します。
-    /* SRP違反 */
-    func canPlaceDisk(_ disk: Disk, atX x: Int, y: Int) -> Bool {
-        !flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y).isEmpty
-    }
-    
-    /// `side` で指定された色のディスクを置ける盤上のセルの座標をすべて返します。
-    /// - Returns: `side` で指定された色のディスクを置ける盤上のすべてのセルの座標の配列です。
-    /* SRP違反 */
-    func validMoves(for side: Disk) -> [(x: Int, y: Int)] {
-        var coordinates: [(Int, Int)] = []
-        
-        for y in boardView.yRange {
-            for x in boardView.xRange {
-                if canPlaceDisk(side, atX: x, y: y) {
-                    coordinates.append((x, y))
-                }
-            }
-        }
-        
-        return coordinates
-    }
 
     /// `x`, `y` で指定されたセルに `disk` を置きます。
     /// - Parameter x: セルの列です。
@@ -175,9 +152,10 @@ extension ViewController {
                 if canceller.isCancelled { return }
                 cleanUp()
 
-                completion?(isFinished)
                 try? self.saveGame()
                 self.updateCountLabels()
+
+                completion?(isFinished)
             }
         } else {
             DispatchQueue.main.async { [weak self] in
@@ -186,9 +164,10 @@ extension ViewController {
                 for (x, y) in diskCoordinates {
                     self.boardView.setDisk(disk, atX: x, y: y, animated: false)
                 }
-                completion?(true)
+
                 try? self.saveGame()
                 self.updateCountLabels()
+                completion?(true)
             }
         }
     }
@@ -261,8 +240,8 @@ extension ViewController {
 
         turn.flip()
         
-        if validMoves(for: turn).isEmpty {
-            if validMoves(for: turn.flipped).isEmpty {
+        if validatePlaceDiskUseCase.execute(disk: turn).isEmpty {
+            if validatePlaceDiskUseCase.execute(disk: turn.flipped).isEmpty {
                 self.turn = nil
                 updateMessageViews()
             } else {
@@ -290,7 +269,7 @@ extension ViewController {
     /* SRP違反 UseCaseに切り出したい */
     func playTurnOfComputer() {
         guard let turn = self.turn else { preconditionFailure() }
-        let (x, y) = validMoves(for: turn).randomElement()!
+        let newAddress = validatePlaceDiskUseCase.execute(disk: turn).randomElement()!
 
         playerActivityIndicators[turn.index].startAnimating()
         
@@ -305,7 +284,7 @@ extension ViewController {
             if canceller.isCancelled { return }
             cleanUp()
             
-            try! self.placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
+            try! self.placeDisk(turn, atX: newAddress.x, y: newAddress.y, animated: true) { [weak self] _ in
                 self?.nextTurn()
             }
         }
