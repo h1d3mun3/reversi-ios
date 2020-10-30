@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A5034D95254BA39600D81DC4 /* PlayerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034D94254BA39600D81DC4 /* PlayerStatus.swift */; };
 		A5034D97254BA39F00D81DC4 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034D96254BA39F00D81DC4 /* Address.swift */; };
 		A5034D99254BA3B700D81DC4 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034D98254BA3B700D81DC4 /* Board.swift */; };
 		A5034D9F254BA40D00D81DC4 /* PlaceDiskUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034D9E254BA40D00D81DC4 /* PlaceDiskUseCase.swift */; };
@@ -15,6 +14,7 @@
 		A5034DA3254BA43500D81DC4 /* SaveGameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034DA2254BA43500D81DC4 /* SaveGameUseCase.swift */; };
 		A5034DA5254BA44700D81DC4 /* LoadGameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034DA4254BA44700D81DC4 /* LoadGameUseCase.swift */; };
 		A5034DA9254BA45C00D81DC4 /* CountDiskUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034DA8254BA45C00D81DC4 /* CountDiskUseCase.swift */; };
+		A5728715254BF4AB0010EC9B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5728714254BF4AB0010EC9B /* Player.swift */; };
 		A5EEC4FE254BE21B0078A044 /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EEC4FD254BE21B0078A044 /* ViewControllerPresenter.swift */; };
 		D636B39F23D35043007F370F /* DiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D636B39E23D35043007F370F /* DiskView.swift */; };
 		D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB323A9FE4500396732 /* AppDelegate.swift */; };
@@ -40,7 +40,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A5034D94254BA39600D81DC4 /* PlayerStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStatus.swift; sourceTree = "<group>"; };
 		A5034D96254BA39F00D81DC4 /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		A5034D98254BA3B700D81DC4 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		A5034D9E254BA40D00D81DC4 /* PlaceDiskUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDiskUseCase.swift; sourceTree = "<group>"; };
@@ -48,6 +47,7 @@
 		A5034DA2254BA43500D81DC4 /* SaveGameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveGameUseCase.swift; sourceTree = "<group>"; };
 		A5034DA4254BA44700D81DC4 /* LoadGameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadGameUseCase.swift; sourceTree = "<group>"; };
 		A5034DA8254BA45C00D81DC4 /* CountDiskUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDiskUseCase.swift; sourceTree = "<group>"; };
+		A5728714254BF4AB0010EC9B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		A5EEC4FD254BE21B0078A044 /* ViewControllerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerPresenter.swift; sourceTree = "<group>"; };
 		D636B39E23D35043007F370F /* DiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskView.swift; sourceTree = "<group>"; };
 		D642BDB023A9FE4500396732 /* Reversi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reversi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,9 +87,9 @@
 		A5034D91254BA37300D81DC4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A5034D94254BA39600D81DC4 /* PlayerStatus.swift */,
 				A5034D96254BA39F00D81DC4 /* Address.swift */,
 				A5034D98254BA3B700D81DC4 /* Board.swift */,
+				A5728714254BF4AB0010EC9B /* Player.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -275,6 +275,7 @@
 				D642BDD623AA0B3900396732 /* CellView.swift in Sources */,
 				D642BDD823AA0B5700396732 /* Disk.swift in Sources */,
 				D642BDB823A9FE4500396732 /* ViewController.swift in Sources */,
+				A5728715254BF4AB0010EC9B /* Player.swift in Sources */,
 				A5034DA5254BA44700D81DC4 /* LoadGameUseCase.swift in Sources */,
 				A5034D99254BA3B700D81DC4 /* Board.swift in Sources */,
 				A5034DA9254BA45C00D81DC4 /* CountDiskUseCase.swift in Sources */,
@@ -283,7 +284,6 @@
 				D642BDDC23AA137C00396732 /* BoardView.swift in Sources */,
 				A5034D97254BA39F00D81DC4 /* Address.swift in Sources */,
 				A5034DA1254BA43000D81DC4 /* ValidatePlaceDiskUseCase.swift in Sources */,
-				A5034D95254BA39600D81DC4 /* PlayerStatus.swift in Sources */,
 				D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */,
 				A5EEC4FE254BE21B0078A044 /* ViewControllerPresenter.swift in Sources */,
 				D642BDB623A9FE4500396732 /* SceneDelegate.swift in Sources */,

@@ -437,8 +437,8 @@ extension ViewController {
         }
 
         guard let turn = turn else { throw FileIOError.read(path: path, cause: nil) }
-        let blackPlayerStatus: PlayerStatus = playerControls[0].selectedSegmentIndex == 0 ? .manual : .computer
-        let whitePlayerStatus: PlayerStatus = playerControls[1].selectedSegmentIndex == 0 ? .manual : .computer
+        let blackPlayerStatus: Player = playerControls[0].selectedSegmentIndex == 0 ? .manual : .computer
+        let whitePlayerStatus: Player = playerControls[1].selectedSegmentIndex == 0 ? .manual : .computer
 
         let board = Board(height: boardView.height, width: boardView.width, blackPlayerStatus: blackPlayerStatus, whitePlayerStatus: whitePlayerStatus, currentPlayDisk: turn, blackCells: blackCells, whiteCells: whiteCells)
         
@@ -475,10 +475,6 @@ extension ViewController {
 // MARK: Additional types
 
 extension ViewController {
-    enum Player: Int {
-        case manual = 0
-        case computer = 1
-    }
 }
 
 final class Canceller {
