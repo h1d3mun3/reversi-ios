@@ -15,6 +15,7 @@
 		A5034DA5254BA44700D81DC4 /* LoadGameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034DA4254BA44700D81DC4 /* LoadGameUseCase.swift */; };
 		A5034DA9254BA45C00D81DC4 /* CountDiskUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034DA8254BA45C00D81DC4 /* CountDiskUseCase.swift */; };
 		A5728715254BF4AB0010EC9B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5728714254BF4AB0010EC9B /* Player.swift */; };
+		A5728718254BF70B0010EC9B /* GetDiskFromBoardUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5728717254BF70B0010EC9B /* GetDiskFromBoardUseCase.swift */; };
 		A5EEC4FE254BE21B0078A044 /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EEC4FD254BE21B0078A044 /* ViewControllerPresenter.swift */; };
 		D636B39F23D35043007F370F /* DiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D636B39E23D35043007F370F /* DiskView.swift */; };
 		D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB323A9FE4500396732 /* AppDelegate.swift */; };
@@ -48,6 +49,7 @@
 		A5034DA4254BA44700D81DC4 /* LoadGameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadGameUseCase.swift; sourceTree = "<group>"; };
 		A5034DA8254BA45C00D81DC4 /* CountDiskUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDiskUseCase.swift; sourceTree = "<group>"; };
 		A5728714254BF4AB0010EC9B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		A5728717254BF70B0010EC9B /* GetDiskFromBoardUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDiskFromBoardUseCase.swift; sourceTree = "<group>"; };
 		A5EEC4FD254BE21B0078A044 /* ViewControllerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerPresenter.swift; sourceTree = "<group>"; };
 		D636B39E23D35043007F370F /* DiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskView.swift; sourceTree = "<group>"; };
 		D642BDB023A9FE4500396732 /* Reversi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reversi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,6 +104,7 @@
 				A5034DA2254BA43500D81DC4 /* SaveGameUseCase.swift */,
 				A5034DA4254BA44700D81DC4 /* LoadGameUseCase.swift */,
 				A5034DA8254BA45C00D81DC4 /* CountDiskUseCase.swift */,
+				A5728717254BF70B0010EC9B /* GetDiskFromBoardUseCase.swift */,
 			);
 			path = UseCase;
 			sourceTree = "<group>";
@@ -276,6 +279,7 @@
 				D642BDD823AA0B5700396732 /* Disk.swift in Sources */,
 				D642BDB823A9FE4500396732 /* ViewController.swift in Sources */,
 				A5728715254BF4AB0010EC9B /* Player.swift in Sources */,
+				A5728718254BF70B0010EC9B /* GetDiskFromBoardUseCase.swift in Sources */,
 				A5034DA5254BA44700D81DC4 /* LoadGameUseCase.swift in Sources */,
 				A5034D99254BA3B700D81DC4 /* Board.swift in Sources */,
 				A5034DA9254BA45C00D81DC4 /* CountDiskUseCase.swift in Sources */,
