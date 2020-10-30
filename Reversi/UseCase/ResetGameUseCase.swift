@@ -1,5 +1,5 @@
 protocol ResetGameUseCaseProtocol {
-    throws func execute()
+    func execute() throws
 }
 
 struct ResetGameUseCase {
@@ -7,7 +7,7 @@ struct ResetGameUseCase {
 }
 
 extension ResetGameUseCase: ResetGameUseCaseProtocol {
-    throws func execute() {
+    func execute() throws {
         
     }
 }

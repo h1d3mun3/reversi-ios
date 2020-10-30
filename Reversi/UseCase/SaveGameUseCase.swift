@@ -1,5 +1,5 @@
 protocol SaveGameUseCaseProtocol {
-    throws func execute(board: Board)
+    func execute(board: Board) throws
 }
 
 struct SaveGameUseCase {
@@ -7,7 +7,7 @@ struct SaveGameUseCase {
 }
 
 extension SaveGameUseCase: SaveGameUseCaseProtocol {
-    throws func execute(board: Board) {
+    func execute(board: Board) throws {
         
     }
 }

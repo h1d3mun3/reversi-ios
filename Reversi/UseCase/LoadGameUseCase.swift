@@ -1,5 +1,5 @@
 protocol LoadGameUseCaseProtocol {
-    throws func execute() -> Board
+    func execute() throws ->  Board
 }
 
 struct LoadGameUseCase {
@@ -7,7 +7,7 @@ struct LoadGameUseCase {
 }
 
 extension LoadGameUseCase: LoadGameUseCaseProtocol {
-    throws func execute() -> Board {
+     func execute() throws -> Board {
         
     }
 }
