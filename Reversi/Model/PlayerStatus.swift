@@ -1,4 +1,6 @@
-enum PlayerStatus {
+import Foundation
+
+enum PlayerStatus: String, Codable {
     case manual
-    case human
+    case computer
 }

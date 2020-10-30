@@ -1,4 +1,6 @@
-public enum Disk {
+import Foundation
+
+public enum Disk: String, Codable {
     case dark
     case light
 }

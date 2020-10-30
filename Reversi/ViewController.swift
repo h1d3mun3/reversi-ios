@@ -1,6 +1,10 @@
 import UIKit
 
 class ViewController: UIViewController {
+    // UseCases
+    let saveGameUseCase = SaveGameUseCase()
+    let loadGameUseCase = LoadGameUseCase()
+
     @IBOutlet private var boardView: BoardView!
     
     @IBOutlet private var messageDiskView: DiskView!
@@ -425,22 +429,30 @@ extension ViewController {
     /// ゲームの状態をファイルに書き出し、保存します。
     /* SRP違反 */
     func saveGame() throws {
-        var output: String = ""
-        output += turn.symbol
-        for side in Disk.sides {
-            output += playerControls[side.index].selectedSegmentIndex.description
-        }
-        output += "\n"
-        
+        var blackCells = [Address]()
+        var whiteCells = [Address]()
+
         for y in boardView.yRange {
             for x in boardView.xRange {
-                output += boardView.diskAt(x: x, y: y).symbol
+                if let disk = boardView.diskAt(x: x, y: y) {
+                    switch disk {
+                    case .dark:
+                        blackCells.append(Address(x: x, y: y))
+                    case .light:
+                        whiteCells.append(Address(x: x, y: y))
+                    }
+                }
             }
-            output += "\n"
         }
+
+        guard let turn = turn else { throw FileIOError.read(path: path, cause: nil) }
+        let blackPlayerStatus: PlayerStatus = playerControls[0].selectedSegmentIndex == 0 ? .manual : .computer
+        let whitePlayerStatus: PlayerStatus = playerControls[1].selectedSegmentIndex == 0 ? .manual : .computer
+
+        let board = Board(height: boardView.height, width: boardView.width, blackPlayerStatus: blackPlayerStatus, whitePlayerStatus: whitePlayerStatus, currentPlayDisk: turn, blackCells: blackCells, whiteCells: whiteCells)
         
         do {
-            try output.write(toFile: path, atomically: true, encoding: .utf8)
+            try saveGameUseCase.execute(board: board)
         } catch let error {
             throw FileIOError.read(path: path, cause: error)
         }
@@ -449,57 +461,15 @@ extension ViewController {
     /// ゲームの状態をファイルから読み込み、復元します。
     /* SRP違反 */
     func loadGame() throws {
-        let input = try String(contentsOfFile: path, encoding: .utf8)
-        var lines: ArraySlice<Substring> = input.split(separator: "\n")[...]
-        
-        guard var line = lines.popFirst() else {
-            throw FileIOError.read(path: path, cause: nil)
-        }
-        
-        do { // turn
-            guard
-                let diskSymbol = line.popFirst(),
-                let disk = Optional<Disk>(symbol: diskSymbol.description)
-            else {
-                throw FileIOError.read(path: path, cause: nil)
-            }
-            turn = disk
-        }
+        let board = try loadGameUseCase.execute()
 
-        // players
-        for side in Disk.sides {
-            guard
-                let playerSymbol = line.popFirst(),
-                let playerNumber = Int(playerSymbol.description),
-                let player = Player(rawValue: playerNumber)
-            else {
-                throw FileIOError.read(path: path, cause: nil)
-            }
-            playerControls[side.index].selectedSegmentIndex = player.rawValue
-        }
+        turn = board.currentPlayDisk
 
-        do { // board
-            guard lines.count == boardView.height else {
-                throw FileIOError.read(path: path, cause: nil)
-            }
-            
-            var y = 0
-            while let line = lines.popFirst() {
-                var x = 0
-                for character in line {
-                    let disk = Disk?(symbol: "\(character)").flatMap { $0 }
-                    boardView.setDisk(disk, atX: x, y: y, animated: false)
-                    x += 1
-                }
-                guard x == boardView.width else {
-                    throw FileIOError.read(path: path, cause: nil)
-                }
-                y += 1
-            }
-            guard y == boardView.height else {
-                throw FileIOError.read(path: path, cause: nil)
-            }
-        }
+        playerControls[0].selectedSegmentIndex = board.blackPlayerStatus == .manual ? 0 : 1
+        playerControls[1].selectedSegmentIndex = board.whitePlayerStatus == .manual ? 0 : 1
+
+        board.blackCells.forEach( { boardView.setDisk(.dark, atX: $0.x, y: $0.y, animated: false) } )
+        board.whiteCells.forEach( { boardView.setDisk(.light, atX: $0.x, y: $0.y, animated: false) } )
 
         updateMessageViews()
         updateCountLabels()
