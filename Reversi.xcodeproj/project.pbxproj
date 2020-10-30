@@ -10,7 +10,6 @@
 		A5034D95254BA39600D81DC4 /* PlayerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034D94254BA39600D81DC4 /* PlayerStatus.swift */; };
 		A5034D97254BA39F00D81DC4 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034D96254BA39F00D81DC4 /* Address.swift */; };
 		A5034D99254BA3B700D81DC4 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034D98254BA3B700D81DC4 /* Board.swift */; };
-		A5034D9D254BA3E600D81DC4 /* StartGameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034D9C254BA3E600D81DC4 /* StartGameUseCase.swift */; };
 		A5034D9F254BA40D00D81DC4 /* PlaceDiskUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034D9E254BA40D00D81DC4 /* PlaceDiskUseCase.swift */; };
 		A5034DA1254BA43000D81DC4 /* ValidatePlaceDiskUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034DA0254BA43000D81DC4 /* ValidatePlaceDiskUseCase.swift */; };
 		A5034DA3254BA43500D81DC4 /* SaveGameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034DA2254BA43500D81DC4 /* SaveGameUseCase.swift */; };
@@ -44,7 +43,6 @@
 		A5034D94254BA39600D81DC4 /* PlayerStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStatus.swift; sourceTree = "<group>"; };
 		A5034D96254BA39F00D81DC4 /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		A5034D98254BA3B700D81DC4 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
-		A5034D9C254BA3E600D81DC4 /* StartGameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGameUseCase.swift; sourceTree = "<group>"; };
 		A5034D9E254BA40D00D81DC4 /* PlaceDiskUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDiskUseCase.swift; sourceTree = "<group>"; };
 		A5034DA0254BA43000D81DC4 /* ValidatePlaceDiskUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatePlaceDiskUseCase.swift; sourceTree = "<group>"; };
 		A5034DA2254BA43500D81DC4 /* SaveGameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveGameUseCase.swift; sourceTree = "<group>"; };
@@ -99,7 +97,6 @@
 		A5034D9B254BA3CC00D81DC4 /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
-				A5034D9C254BA3E600D81DC4 /* StartGameUseCase.swift */,
 				A5034D9E254BA40D00D81DC4 /* PlaceDiskUseCase.swift */,
 				A5034DA0254BA43000D81DC4 /* ValidatePlaceDiskUseCase.swift */,
 				A5034DA2254BA43500D81DC4 /* SaveGameUseCase.swift */,
@@ -276,7 +273,6 @@
 			files = (
 				D636B39F23D35043007F370F /* DiskView.swift in Sources */,
 				D642BDD623AA0B3900396732 /* CellView.swift in Sources */,
-				A5034D9D254BA3E600D81DC4 /* StartGameUseCase.swift in Sources */,
 				D642BDD823AA0B5700396732 /* Disk.swift in Sources */,
 				D642BDB823A9FE4500396732 /* ViewController.swift in Sources */,
 				A5034DA5254BA44700D81DC4 /* LoadGameUseCase.swift in Sources */,
