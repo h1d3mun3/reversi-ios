@@ -3,7 +3,7 @@ struct Board {
     let width: Int
     let blackPlayerStatus: PlayerStatus
     let whitePlayerStatus: PlayerStatus
-    let currentPlayDisk: Disk
+    let currentPlayDisk: DiskNew
     let blackCells: [Address]
     let whiteCells: [Address]
 }

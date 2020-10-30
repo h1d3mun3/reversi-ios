@@ -8,6 +8,6 @@ struct CountDiskUseCase {
 
 extension CountDiskUseCase: CountDiskUseCaseProtocol {
     func count(disk: Disk) -> Int {
-        
+        return Int.min
     }
 }
