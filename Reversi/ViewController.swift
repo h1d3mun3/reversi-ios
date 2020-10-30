@@ -5,10 +5,9 @@ class ViewController: UIViewController {
     let saveGameUseCase = SaveGameUseCase()
     let loadGameUseCase = LoadGameUseCase()
     let countDiskUseCase = CountDiskUseCase(loadGameUseCase: LoadGameUseCase())
-    let validatePlaceDiskUseCase = ValidatePlaceDiskUseCase(
+    let getAllPossibleCoordinatesByDiskUseCase = GetAllPossibleCoordinatesByDiskUseCase(
         loadGameUseCase: LoadGameUseCase(),
-        getDiskFromBoardUseCase: GetDiskFromBoardUseCase(loadGameUseCase: LoadGameUseCase())
-    )
+        getAllCoordinatesAffectedUseCase: GetAllCoordinatesAffectedUseCase(getDiskFromBoardUseCase: GetDiskFromBoardUseCase(loadGameUseCase: LoadGameUseCase())))
 
     @IBOutlet private var boardView: BoardView!
     
@@ -240,8 +239,8 @@ extension ViewController {
 
         turn.flip()
         
-        if validatePlaceDiskUseCase.execute(disk: turn).isEmpty {
-            if validatePlaceDiskUseCase.execute(disk: turn.flipped).isEmpty {
+        if getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn).isEmpty {
+            if getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn.flipped).isEmpty {
                 self.turn = nil
                 updateMessageViews()
             } else {
@@ -269,7 +268,7 @@ extension ViewController {
     /* SRP違反 UseCaseに切り出したい */
     func playTurnOfComputer() {
         guard let turn = self.turn else { preconditionFailure() }
-        let newAddress = validatePlaceDiskUseCase.execute(disk: turn).randomElement()!
+        let newAddress = getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn).randomElement()!
 
         playerActivityIndicators[turn.index].startAnimating()
         
