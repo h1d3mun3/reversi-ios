@@ -3,19 +3,6 @@ import UIKit
 class ViewController: UIViewController {
     let presenter: PresenterProtocol = PresenterBuilder.build()
 
-    // UseCases
-    let saveGameUseCase = SaveGameUseCase()
-    let loadGameUseCase = LoadGameUseCase()
-    let countDiskUseCase = CountDiskUseCase(loadGameUseCase: LoadGameUseCase())
-    let getAllPossibleCoordinatesByDiskUseCase = GetAllPossibleCoordinatesByDiskUseCase(
-        loadGameUseCase: LoadGameUseCase(),
-        getAllCoordinatesAffectedUseCase: GetAllCoordinatesAffectedUseCase(getDiskFromBoardUseCase: GetDiskFromBoardUseCase(loadGameUseCase: LoadGameUseCase())))
-    let placeDiskUseCase = PlaceDiskUseCase(loadGameUseCase: LoadGameUseCase(),
-                                            getAllCoordinatesAffectedUseCase: GetAllCoordinatesAffectedUseCase(
-                                                getDiskFromBoardUseCase: GetDiskFromBoardUseCase(loadGameUseCase: LoadGameUseCase()
-                                            ))
-    )
-
     @IBOutlet private var boardView: BoardView!
     
     @IBOutlet private var messageDiskView: DiskView!
@@ -72,7 +59,7 @@ extension ViewController {
     /// - Parameter side: 数えるディスクの色です。
     /// - Returns: `side` で指定された色のディスクの、盤上の枚数です。
     func countDisks(of side: Disk) -> Int {
-        return countDiskUseCase.count(disk: side) ?? 0
+        return presenter.countDiskUseCase.count(disk: side) ?? 0
     }
 
     /// 盤上に置かれたディスクの枚数が多い方の色を返します。
@@ -99,8 +86,8 @@ extension ViewController {
     /// - Throws: もし `disk` を `x`, `y` で指定されるセルに置けない場合、 `DiskPlacementError` を `throw` します。
     /* SRP違反 */
     func placeDisk(_ disk: Disk, atX x: Int, y: Int, animated isAnimated: Bool, completion: ((Bool) -> Void)? = nil) throws {
-        let newBoard = try placeDiskUseCase.placeDisk(disk: disk, address: Address(x: x, y: y))
-        let oldBoard = try loadGameUseCase.execute()
+        let newBoard = try presenter.placeDiskUseCase.placeDisk(disk: disk, address: Address(x: x, y: y))
+        let oldBoard = try presenter.loadGameUseCase.execute()
 
         let diskCoordinates: [Address]
 
@@ -210,8 +197,8 @@ extension ViewController {
 
         turn.flip()
         
-        if getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn).isEmpty {
-            if getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn.flipped).isEmpty {
+        if presenter.getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn).isEmpty {
+            if presenter.getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn.flipped).isEmpty {
                 self.turn = nil
                 updateMessageViews()
             } else {
@@ -239,7 +226,7 @@ extension ViewController {
     /* SRP違反 UseCaseに切り出したい */
     func playTurnOfComputer() {
         guard let turn = self.turn else { preconditionFailure() }
-        let newAddress = getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn).randomElement()!
+        let newAddress = presenter.getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn).randomElement()!
 
         playerActivityIndicators[turn.index].startAnimating()
         
@@ -392,7 +379,7 @@ extension ViewController {
         let board = Board(height: boardView.height, width: boardView.width, blackPlayerStatus: blackPlayerStatus, whitePlayerStatus: whitePlayerStatus, currentPlayDisk: turn, blackCells: blackCells, whiteCells: whiteCells)
         
         do {
-            try saveGameUseCase.execute(board: board)
+            try presenter.saveGameUseCase.execute(board: board)
         } catch let error {
             throw FileIOError.read(path: path, cause: error)
         }
@@ -401,7 +388,7 @@ extension ViewController {
     /// ゲームの状態をファイルから読み込み、復元します。
     /* SRP違反 */
     func loadGame() throws {
-        let board = try loadGameUseCase.execute()
+        let board = try presenter.loadGameUseCase.execute()
 
         turn = board.currentPlayDisk
 

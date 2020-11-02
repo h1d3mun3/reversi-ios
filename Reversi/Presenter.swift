@@ -1,10 +1,14 @@
 import Foundation
 
 protocol PresenterProtocol {
-
+    var saveGameUseCase: SaveGameUseCaseProtocol { get }
+    var loadGameUseCase: LoadGameUseCaseProtocol { get }
+    var countDiskUseCase: CountDiskUseCaseProtocol { get }
+    var getAllPossibleCoordinatesByDiskUseCase: GetAllPossibleCoordinatesByDiskUseCaseProtocol { get }
+    var placeDiskUseCase: PlaceDiskUseCaseProtocol { get }
 }
 
-final class Presenter {
+final class Presenter: PresenterProtocol {
     let saveGameUseCase: SaveGameUseCaseProtocol
     let loadGameUseCase: LoadGameUseCaseProtocol
     let countDiskUseCase: CountDiskUseCaseProtocol
@@ -18,8 +22,4 @@ final class Presenter {
         self.getAllPossibleCoordinatesByDiskUseCase = getAllPossibleCoordinatesByDiskUseCase
         self.placeDiskUseCase = placeDiskUseCase
     }
-}
-
-extension Presenter: PresenterProtocol {
-
 }
