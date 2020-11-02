@@ -1,7 +1,11 @@
 import UIKit
 
+protocol ViewControllerProtocol: AnyObject {
+
+}
+
 class ViewController: UIViewController {
-    let presenter: PresenterProtocol = PresenterBuilder.build()
+    lazy var presenter: PresenterProtocol = PresenterBuilder.build(view: self)
 
     @IBOutlet private var boardView: BoardView!
     
@@ -434,3 +438,7 @@ struct DiskPlacementError: Error {
     let y: Int
 }
 
+
+extension ViewController: ViewControllerProtocol {
+    
+}

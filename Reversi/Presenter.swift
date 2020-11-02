@@ -9,13 +9,15 @@ protocol PresenterProtocol {
 }
 
 final class Presenter: PresenterProtocol {
+    weak var view: ViewControllerProtocol?
     let saveGameUseCase: SaveGameUseCaseProtocol
     let loadGameUseCase: LoadGameUseCaseProtocol
     let countDiskUseCase: CountDiskUseCaseProtocol
     let getAllPossibleCoordinatesByDiskUseCase: GetAllPossibleCoordinatesByDiskUseCaseProtocol
     let placeDiskUseCase: PlaceDiskUseCaseProtocol
 
-    init(saveGameUseCase: SaveGameUseCaseProtocol, loadGameUseCase: LoadGameUseCaseProtocol, countDiskUseCase: CountDiskUseCaseProtocol, getAllPossibleCoordinatesByDiskUseCase: GetAllPossibleCoordinatesByDiskUseCaseProtocol, placeDiskUseCase: PlaceDiskUseCaseProtocol) {
+    init(view: ViewControllerProtocol?, saveGameUseCase: SaveGameUseCaseProtocol, loadGameUseCase: LoadGameUseCaseProtocol, countDiskUseCase: CountDiskUseCaseProtocol, getAllPossibleCoordinatesByDiskUseCase: GetAllPossibleCoordinatesByDiskUseCaseProtocol, placeDiskUseCase: PlaceDiskUseCaseProtocol) {
+        self.view = view
         self.saveGameUseCase = saveGameUseCase
         self.loadGameUseCase = loadGameUseCase
         self.countDiskUseCase = countDiskUseCase

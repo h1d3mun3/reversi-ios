@@ -1,5 +1,5 @@
 struct PresenterBuilder {
-    static func build() -> Presenter {
+    static func build(view: ViewControllerProtocol) -> Presenter {
         let saveGameUseCase = SaveGameUseCase()
         let loadGameUseCase = LoadGameUseCase()
         let countDiskUseCase = CountDiskUseCase(loadGameUseCase: LoadGameUseCase())
@@ -11,7 +11,7 @@ struct PresenterBuilder {
                                                     getDiskFromBoardUseCase: GetDiskFromBoardUseCase(loadGameUseCase: LoadGameUseCase()
                                                 ))
         )
-        let presenter = Presenter(saveGameUseCase: saveGameUseCase, loadGameUseCase: loadGameUseCase, countDiskUseCase: countDiskUseCase, getAllPossibleCoordinatesByDiskUseCase: getAllPossibleCoordinatesByDiskUseCase, placeDiskUseCase: placeDiskUseCase)
+        let presenter = Presenter(view: view, saveGameUseCase: saveGameUseCase, loadGameUseCase: loadGameUseCase, countDiskUseCase: countDiskUseCase, getAllPossibleCoordinatesByDiskUseCase: getAllPossibleCoordinatesByDiskUseCase, placeDiskUseCase: placeDiskUseCase)
 
         return presenter
     }
