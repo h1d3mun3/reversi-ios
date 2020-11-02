@@ -355,6 +355,8 @@ struct DiskPlacementError: Error {
 
 extension ViewController: ViewControllerProtocol {
     func updatedBoard(board: Board, turn: Disk?) {
+        boardView.reset()
+
         playerControls[0].selectedSegmentIndex = board.blackPlayerStatus == .manual ? 0 : 1
         playerControls[1].selectedSegmentIndex = board.whitePlayerStatus == .manual ? 0 : 1
 
