@@ -1,11 +1,11 @@
 import UIKit
 
 protocol ViewControllerProtocol: AnyObject {
-
+    func updatedBoard(board: Board, turn: Disk?)
 }
 
 class ViewController: UIViewController {
-    lazy var presenter: PresenterProtocol = PresenterBuilder.build(view: self)
+    lazy var presenter: Presenter = PresenterBuilder.build(view: self)
 
     @IBOutlet private var boardView: BoardView!
     
@@ -24,9 +24,6 @@ class ViewController: UIViewController {
     @IBOutlet private var countLabels: [UILabel]!
     @IBOutlet private var playerActivityIndicators: [UIActivityIndicatorView]!
     
-    /// どちらの色のプレイヤーのターンかを表します。ゲーム終了時は `nil` です。
-    private var turn: Disk? = .dark
-    
     private var animationCanceller: Canceller?
     private var isAnimating: Bool { animationCanceller != nil }
     
@@ -38,12 +35,7 @@ class ViewController: UIViewController {
         boardView.delegate = self
         messageDiskSize = messageDiskSizeConstraint.constant
 
-        /* SRP違反 */
-        do {
-            try loadGame()
-        } catch _ {
-            newGame()
-        }
+        presenter.viewDidLoad()
     }
     
     private var viewHasAppeared: Bool = false
@@ -113,7 +105,7 @@ extension ViewController {
                 if canceller.isCancelled { return }
                 cleanUp()
 
-                try? self.saveGame()
+                try? self.presenter.saveGame(board: self.boardModel())
                 self.updateCountLabels()
 
                 completion?(isFinished)
@@ -126,7 +118,7 @@ extension ViewController {
                     self.boardView.setDisk(disk, atX: address.x, y: address.y, animated: false)
                 }
 
-                try? self.saveGame()
+                try? self.presenter.saveGame(board: self.boardModel())
                 self.updateCountLabels()
                 completion?(true)
             }
@@ -164,26 +156,10 @@ extension ViewController {
 // MARK: Game management
 
 extension ViewController {
-    /// ゲームの状態を初期化し、新しいゲームを開始します。
-    /* SRP違反 */
-    func newGame() {
-        boardView.reset()
-        turn = .dark
-        
-        for playerControl in playerControls {
-            playerControl.selectedSegmentIndex = Player.manual.rawValue
-        }
-
-        updateMessageViews()
-        updateCountLabels()
-        
-        try? saveGame()
-    }
-    
     /// プレイヤーの行動を待ちます。
     /* SRP違反 */
     func waitForPlayer() {
-        guard let turn = self.turn else { return }
+        guard let turn = presenter.turn else { return }
         switch Player(rawValue: playerControls[turn.index].selectedSegmentIndex)! {
         case .manual:
             break
@@ -197,17 +173,17 @@ extension ViewController {
     /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
     /* SRP違反 */
     func nextTurn() {
-        guard var turn = self.turn else { return }
+        guard var turn = presenter.turn else { return }
 
         turn.flip()
         
         if presenter.getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn).isEmpty {
             if presenter.getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn.flipped).isEmpty {
-                self.turn = nil
-                updateMessageViews()
+                presenter.turn = nil
+                updateMessageViews(turn: presenter.turn)
             } else {
-                self.turn = turn
-                updateMessageViews()
+                presenter.turn = turn
+                updateMessageViews(turn: presenter.turn)
                 
                 let alertController = UIAlertController(
                     title: "Pass",
@@ -220,8 +196,8 @@ extension ViewController {
                 present(alertController, animated: true)
             }
         } else {
-            self.turn = turn
-            updateMessageViews()
+            presenter.turn = turn
+            updateMessageViews(turn: presenter.turn)
             waitForPlayer()
         }
     }
@@ -229,7 +205,7 @@ extension ViewController {
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
     /* SRP違反 UseCaseに切り出したい */
     func playTurnOfComputer() {
-        guard let turn = self.turn else { preconditionFailure() }
+        guard let turn = presenter.turn else { preconditionFailure() }
         let newAddress = presenter.getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn).randomElement()!
 
         playerActivityIndicators[turn.index].startAnimating()
@@ -267,7 +243,7 @@ extension ViewController {
     
     /// 現在の状況に応じてメッセージを表示します。
     /* SRP違反 メッセージ生成処理と表示処理を分けたい */
-    func updateMessageViews() {
+    func updateMessageViews(turn: Disk?) {
         switch turn {
         case .some(let side):
             messageDiskSizeConstraint.constant = messageDiskSize
@@ -311,7 +287,7 @@ extension ViewController {
                 self.playerCancellers.removeValue(forKey: side)
             }
             
-            self.newGame()
+            self.presenter.newGame()
             self.waitForPlayer()
         })
         present(alertController, animated: true)
@@ -321,13 +297,13 @@ extension ViewController {
     @IBAction func changePlayerControlSegment(_ sender: UISegmentedControl) {
         let side: Disk = Disk(index: playerControls.firstIndex(of: sender)!)
         
-        try? saveGame()
+        try? presenter.saveGame(board: boardModel())
         
         if let canceller = playerCancellers[side] {
             canceller.cancel()
         }
         
-        if !isAnimating, side == turn, case .computer = Player(rawValue: sender.selectedSegmentIndex)! {
+        if !isAnimating, side == presenter.turn, case .computer = Player(rawValue: sender.selectedSegmentIndex)! {
             playTurnOfComputer()
         }
     }
@@ -340,75 +316,13 @@ extension ViewController: BoardViewDelegate {
     /// - Parameter y: セルの行です。
     /* SRP違反 タップされたときのビジネスロジックを切り出したい */
     func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
-        guard let turn = turn else { return }
+        guard let turn = presenter.turn else { return }
         if isAnimating { return }
         guard case .manual = Player(rawValue: playerControls[turn.index].selectedSegmentIndex)! else { return }
         // try? because doing nothing when an error occurs
         try? placeDisk(turn, atX: x, y: y, animated: true) { [weak self] _ in
             self?.nextTurn()
         }
-    }
-}
-
-// MARK: Save and Load
-
-extension ViewController {
-    private var path: String {
-        (NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first! as NSString).appendingPathComponent("Game")
-    }
-    
-    /// ゲームの状態をファイルに書き出し、保存します。
-    /* SRP違反 */
-    func saveGame() throws {
-        var blackCells = [Address]()
-        var whiteCells = [Address]()
-
-        for y in boardView.yRange {
-            for x in boardView.xRange {
-                if let disk = boardView.diskAt(x: x, y: y) {
-                    switch disk {
-                    case .dark:
-                        blackCells.append(Address(x: x, y: y))
-                    case .light:
-                        whiteCells.append(Address(x: x, y: y))
-                    }
-                }
-            }
-        }
-
-        guard let turn = turn else { throw FileIOError.read(path: path, cause: nil) }
-        let blackPlayerStatus: Player = playerControls[0].selectedSegmentIndex == 0 ? .manual : .computer
-        let whitePlayerStatus: Player = playerControls[1].selectedSegmentIndex == 0 ? .manual : .computer
-
-        let board = Board(height: boardView.height, width: boardView.width, blackPlayerStatus: blackPlayerStatus, whitePlayerStatus: whitePlayerStatus, currentPlayDisk: turn, blackCells: blackCells, whiteCells: whiteCells)
-        
-        do {
-            try presenter.saveGameUseCase.execute(board: board)
-        } catch let error {
-            throw FileIOError.read(path: path, cause: error)
-        }
-    }
-    
-    /// ゲームの状態をファイルから読み込み、復元します。
-    /* SRP違反 */
-    func loadGame() throws {
-        let board = try presenter.loadGameUseCase.execute()
-
-        turn = board.currentPlayDisk
-
-        playerControls[0].selectedSegmentIndex = board.blackPlayerStatus == .manual ? 0 : 1
-        playerControls[1].selectedSegmentIndex = board.whitePlayerStatus == .manual ? 0 : 1
-
-        board.blackCells.forEach( { boardView.setDisk(.dark, atX: $0.x, y: $0.y, animated: false) } )
-        board.whiteCells.forEach( { boardView.setDisk(.light, atX: $0.x, y: $0.y, animated: false) } )
-
-        updateMessageViews()
-        updateCountLabels()
-    }
-    
-    enum FileIOError: Error {
-        case write(path: String, cause: Error?)
-        case read(path: String, cause: Error?)
     }
 }
 
@@ -440,5 +354,41 @@ struct DiskPlacementError: Error {
 
 
 extension ViewController: ViewControllerProtocol {
-    
+    func updatedBoard(board: Board, turn: Disk?) {
+        playerControls[0].selectedSegmentIndex = board.blackPlayerStatus == .manual ? 0 : 1
+        playerControls[1].selectedSegmentIndex = board.whitePlayerStatus == .manual ? 0 : 1
+
+        board.blackCells.forEach( { boardView.setDisk(.dark, atX: $0.x, y: $0.y, animated: false) } )
+        board.whiteCells.forEach( { boardView.setDisk(.light, atX: $0.x, y: $0.y, animated: false) } )
+
+        updateMessageViews(turn: turn)
+        updateCountLabels()
+    }
+}
+
+extension ViewController {
+    fileprivate func boardModel() -> Board {
+        var blackCells = [Address]()
+        var whiteCells = [Address]()
+
+        for y in boardView.yRange {
+            for x in boardView.xRange {
+                if let disk = boardView.diskAt(x: x, y: y) {
+                    switch disk {
+                    case .dark:
+                        blackCells.append(Address(x: x, y: y))
+                    case .light:
+                        whiteCells.append(Address(x: x, y: y))
+                    }
+                }
+            }
+        }
+
+        let blackPlayerStatus: Player = playerControls[0].selectedSegmentIndex == 0 ? .manual : .computer
+        let whitePlayerStatus: Player = playerControls[1].selectedSegmentIndex == 0 ? .manual : .computer
+
+        let board = Board(height: boardView.height, width: boardView.width, blackPlayerStatus: blackPlayerStatus, whitePlayerStatus: whitePlayerStatus, currentPlayDisk: presenter.turn!, blackCells: blackCells, whiteCells: whiteCells)
+
+        return board
+    }
 }
