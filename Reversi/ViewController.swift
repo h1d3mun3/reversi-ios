@@ -176,9 +176,9 @@ extension ViewController {
         guard var turn = presenter.turn else { return }
 
         turn.flip()
-        
-        if presenter.getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn).isEmpty {
-            if presenter.getAllPossibleCoordinatesByDiskUseCase.execute(disk: turn.flipped).isEmpty {
+
+        if presenter.getAllPossibleCoordinates(of: turn).isEmpty {
+            if presenter.getAllPossibleCoordinates(of: turn.flipped).isEmpty {
                 presenter.turn = nil
                 updateMessageViews(turn: presenter.turn)
             } else {

@@ -8,6 +8,7 @@ protocol PresenterProtocol {
     var placeDiskUseCase: PlaceDiskUseCaseProtocol { get }
 
     func viewDidLoad()
+    func getAllPossibleCoordinates(of disk: Disk) -> [Address]
 }
 
 protocol PresenterCompatibilityProtocol {
@@ -90,6 +91,10 @@ extension Presenter {
         } catch _ {
             newGame()
         }
+    }
+
+    func getAllPossibleCoordinates(of disk: Disk) -> [Address] {
+        return getAllPossibleCoordinatesByDiskUseCase.execute(disk: disk)
     }
 }
 
