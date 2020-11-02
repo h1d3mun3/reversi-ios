@@ -14,10 +14,11 @@
 		A5034DA3254BA43500D81DC4 /* SaveGameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034DA2254BA43500D81DC4 /* SaveGameUseCase.swift */; };
 		A5034DA5254BA44700D81DC4 /* LoadGameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034DA4254BA44700D81DC4 /* LoadGameUseCase.swift */; };
 		A5034DA9254BA45C00D81DC4 /* CountDiskUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5034DA8254BA45C00D81DC4 /* CountDiskUseCase.swift */; };
+		A53C830B254FDCF0004572EC /* PresenterBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53C830A254FDCF0004572EC /* PresenterBuilder.swift */; };
 		A5728715254BF4AB0010EC9B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5728714254BF4AB0010EC9B /* Player.swift */; };
 		A5728718254BF70B0010EC9B /* GetDiskFromBoardUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5728717254BF70B0010EC9B /* GetDiskFromBoardUseCase.swift */; };
 		A5C8464A254C146400D31357 /* GetAllCoordinatesAffectedUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C84649254C146400D31357 /* GetAllCoordinatesAffectedUseCase.swift */; };
-		A5EEC4FE254BE21B0078A044 /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EEC4FD254BE21B0078A044 /* ViewControllerPresenter.swift */; };
+		A5EEC4FE254BE21B0078A044 /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EEC4FD254BE21B0078A044 /* Presenter.swift */; };
 		D636B39F23D35043007F370F /* DiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D636B39E23D35043007F370F /* DiskView.swift */; };
 		D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB323A9FE4500396732 /* AppDelegate.swift */; };
 		D642BDB623A9FE4500396732 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB523A9FE4500396732 /* SceneDelegate.swift */; };
@@ -49,10 +50,11 @@
 		A5034DA2254BA43500D81DC4 /* SaveGameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveGameUseCase.swift; sourceTree = "<group>"; };
 		A5034DA4254BA44700D81DC4 /* LoadGameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadGameUseCase.swift; sourceTree = "<group>"; };
 		A5034DA8254BA45C00D81DC4 /* CountDiskUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDiskUseCase.swift; sourceTree = "<group>"; };
+		A53C830A254FDCF0004572EC /* PresenterBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenterBuilder.swift; sourceTree = "<group>"; };
 		A5728714254BF4AB0010EC9B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		A5728717254BF70B0010EC9B /* GetDiskFromBoardUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDiskFromBoardUseCase.swift; sourceTree = "<group>"; };
 		A5C84649254C146400D31357 /* GetAllCoordinatesAffectedUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllCoordinatesAffectedUseCase.swift; sourceTree = "<group>"; };
-		A5EEC4FD254BE21B0078A044 /* ViewControllerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerPresenter.swift; sourceTree = "<group>"; };
+		A5EEC4FD254BE21B0078A044 /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
 		D636B39E23D35043007F370F /* DiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskView.swift; sourceTree = "<group>"; };
 		D642BDB023A9FE4500396732 /* Reversi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reversi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D642BDB323A9FE4500396732 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -156,7 +158,8 @@
 				D642BDB323A9FE4500396732 /* AppDelegate.swift */,
 				D642BDB523A9FE4500396732 /* SceneDelegate.swift */,
 				D642BDB723A9FE4500396732 /* ViewController.swift */,
-				A5EEC4FD254BE21B0078A044 /* ViewControllerPresenter.swift */,
+				A5EEC4FD254BE21B0078A044 /* Presenter.swift */,
+				A53C830A254FDCF0004572EC /* PresenterBuilder.swift */,
 				D642BDB923A9FE4500396732 /* Main.storyboard */,
 				D642BDBC23A9FE4700396732 /* Assets.xcassets */,
 				D642BDBE23A9FE4700396732 /* LaunchScreen.storyboard */,
@@ -279,6 +282,7 @@
 			files = (
 				D636B39F23D35043007F370F /* DiskView.swift in Sources */,
 				D642BDD623AA0B3900396732 /* CellView.swift in Sources */,
+				A53C830B254FDCF0004572EC /* PresenterBuilder.swift in Sources */,
 				D642BDD823AA0B5700396732 /* Disk.swift in Sources */,
 				D642BDB823A9FE4500396732 /* ViewController.swift in Sources */,
 				A5728715254BF4AB0010EC9B /* Player.swift in Sources */,
@@ -293,7 +297,7 @@
 				A5034D97254BA39F00D81DC4 /* Address.swift in Sources */,
 				A5034DA1254BA43000D81DC4 /* GetAllPossibleCoordinatesByDiskUseCase.swift in Sources */,
 				D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */,
-				A5EEC4FE254BE21B0078A044 /* ViewControllerPresenter.swift in Sources */,
+				A5EEC4FE254BE21B0078A044 /* Presenter.swift in Sources */,
 				D642BDB623A9FE4500396732 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

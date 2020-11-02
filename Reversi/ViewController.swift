@@ -1,6 +1,8 @@
 import UIKit
 
 class ViewController: UIViewController {
+    let presenter: PresenterProtocol = PresenterBuilder.build()
+
     // UseCases
     let saveGameUseCase = SaveGameUseCase()
     let loadGameUseCase = LoadGameUseCase()
