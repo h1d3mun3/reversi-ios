@@ -11,13 +11,7 @@ extension CountDiskUseCase: CountDiskUseCaseProtocol {
         do {
             let board = try loadGameUseCase.execute()
 
-            switch disk {
-            case .dark:
-                return board.blackCells.count
-            case .light:
-                return board.whiteCells.count
-            }
-
+            return board.count(disk: disk)
         } catch {
             return nil
         }
